@@ -1,0 +1,33 @@
+parameters:
+  EnvironmentName: ''
+  stageName: ''
+  imageName: ''
+  tags: ''
+  serviceConnection: ''
+  dockerFilePath: ''
+
+
+stages:
+- stage: ${{ parameters.stageName }}${{ parameters.EnvironmentName }}
+  displayName: '${{ parameters.stageName }} on ${{ parameters.EnvironmentName }} environment'
+
+  jobs:
+
+    - deployment: BuildAndDeployImage
+      displayName: '${{ parameters.stageName }} Image'
+      environment: '${{ parameters.EnvironmentName }}'
+      continueOnError: 'true'
+      workspace:
+        clean: all
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - checkout: self
+              - template: Build-Deploy-template.yml
+                parameters:
+                  stageName: ${{ parameters.stageName }}
+                  serviceConnection: ${{ parameters.serviceConnection }}
+                  dockerFilePath: ${{ parameters.dockerFilePath }}
+                  imageName: ${{ parameters.imageName }}
+                  tags: ${{ parameters.tags }}

@@ -1,0 +1,31 @@
+parameters:
+  dockerRegistryServiceConnection: ''
+  dockerFilePath: ''
+  imageName: ''
+  tags: ''
+  arguments: ''
+
+
+steps:
+  - bash: |
+      sudo chmod 666 /var/run/docker.sock
+
+  - task: Docker@2
+    displayName: 'Build Image ${{ parameters.imageName }}:${{ parameters.tags }} with service connection ${{ parameters.dockerRegistryServiceConnection }}'
+    inputs:
+      command: build
+      repository: ${{ parameters.imageName }}
+      containerRegistry: ${{ parameters.dockerRegistryServiceConnection }}
+      dockerfile: ${{ parameters.dockerFilePath }}
+      tags: | 
+        ${{ parameters.tags }}
+      arguments: ${{ parameters.arguements }}
+
+  - task: Docker@2
+    displayName: 'Push Image ${{ parameters.imageName }}:${{ parameters.tags }}'
+    inputs:
+      command: push
+      repository: ${{ parameters.imageName }}
+      containerRegistry: ${{ parameters.dockerRegistryServiceConnection }}
+      tags: | 
+        ${{ parameters.tags }}

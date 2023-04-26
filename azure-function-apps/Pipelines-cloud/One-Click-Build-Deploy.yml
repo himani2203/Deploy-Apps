@@ -1,0 +1,16 @@
+
+trigger:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- templates: Application-Template.yml
+  parameters:
+    EnvironmentName: 'development'
+    stageName: BuildAndPush
+    imageName: 'flask'
+    tags: '000'
+    serviceConnection: 'acr_push_service_connection'
+    dockerFilePath: '$(Build.SourcesDirectory)/azure-function-apps/Dockerfile'

@@ -1,0 +1,17 @@
+parameters:
+  stageName: ''
+  imageName: ''
+  serviceConnection: ''
+  dockerFilePath: ''
+  tags: ''
+
+
+steps:
+  - ${{if contains(parameters.stageName, 'BuildAndPush')}}:
+    - template: Common/Docker_Build_Push_Template.yml
+      parameters:
+        imageName: ${{ parameters.imageName }}
+        dockerRegistryServiceConnection: ${{ parameters.serviceConnection }}
+        dockerFilePath : ${{ parameters.dockerFilePath }}
+        tags: ${{ parameters.imageName }}
+        arguments: ''
