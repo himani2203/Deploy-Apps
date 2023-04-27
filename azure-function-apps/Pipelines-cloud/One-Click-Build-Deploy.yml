@@ -3,12 +3,12 @@ trigger:
 - none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'  #azure pools will work only if ACR is set to Public else it will throw 403 error
 
 stages:
 - templates: Application-Template.yml
   parameters:
-    EnvironmentName: 'development'
+    EnvironmentName: 'development'  #create environment under Pipelines with approvals and checks
     stageName: BuildAndPush
     imageName: 'flask'
     tags: '000'
